@@ -27,20 +27,20 @@ The validation set of HellaSwag has a total of 10,042 examples.
 
 import os
 import json
-import requests
 import tiktoken
 from tqdm import tqdm
 import torch
 import torch.nn as nn
 from torch.nn import functional as F
 from transformers import GPT2LMHeadModel
+from security import safe_requests
 
 # -----------------------------------------------------------------------------
 DATA_CACHE_DIR = os.path.join(os.path.dirname(__file__), "hellaswag")
 
 def download_file(url: str, fname: str, chunk_size=1024):
     """Helper function to download a file from a given url"""
-    resp = requests.get(url, stream=True)
+    resp = safe_requests.get(url, stream=True)
     total = int(resp.headers.get("content-length", 0))
     with open(fname, "wb") as file, tqdm(
         desc=fname,
